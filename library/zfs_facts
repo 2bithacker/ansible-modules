@@ -1,0 +1,50 @@
+#!/usr/bin/env python2.7
+
+from ansible.module_utils.basic import *
+from ansible.module_utils.facts import *
+
+ZPOOL_DEFAULT_PROPS=('name','size','alloc','free','fragmentation','expandsize','capacity','health','altroot')
+ZFS_DEFAULT_PROPS=('name','used','available','referenced','mountpoint')
+
+def zfs_parse_output(fields, text):
+    data = list()
+
+    for line in text.strip().split('\n'):
+        cols = line.split()
+        x = 0
+        linedata = dict()
+
+        for f in fields:
+            linedata[f] = cols[x].strip()
+            x = x+1
+
+        data.append(linedata)
+
+    return data
+
+def zfs_run_command(module, command, args, fields):
+    cmd_path = module.get_bin_path(command)
+    rc, out, err = module.run_command(cmd_path + args + ' -o ' + ','.join(fields))
+    if rc != 0:
+        raise Exception(err)
+
+    results = zfs_parse_output(fields, out)
+    return results
+
+
+def zfs_facts(module):
+    facts = dict()
+
+    facts['zfs_pools'] = zfs_run_command(module, 'zpool', ' list -Hp', ZPOOL_DEFAULT_PROPS)
+    facts['zfs_filesystems'] = zfs_run_command(module, 'zfs', ' list -Hpt filesystem', ZFS_DEFAULT_PROPS)
+
+    results = { 'ansible_facts': facts }
+    return results
+
+def main():
+    global module
+    module = AnsibleModule(argument_spec = dict())
+    data = zfs_facts(module)
+    module.exit_json(**data)
+
+main()
