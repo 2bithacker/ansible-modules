@@ -22,3 +22,7 @@ shark.2bithacker.net | success >> {
     "changed": false
 }
 ```
+
+## zfs_facts
+
+Facts module to collect information on existing zpools and zfs filesystems.
