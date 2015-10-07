@@ -3,8 +3,8 @@
 from ansible.module_utils.basic import *
 from ansible.module_utils.facts import *
 
-ZPOOL_DEFAULT_PROPS=('name','size','alloc','free','fragmentation','expandsize','capacity','health','altroot')
-ZFS_DEFAULT_PROPS=('name','used','available','referenced','mountpoint')
+ZPOOL_DEFAULT_PROPS='name,size,alloc,free,fragmentation,expandsize,capacity,health,altroot'
+ZFS_DEFAULT_PROPS='name,used,available,referenced,mountpoint'
 
 def zfs_parse_output(fields, text):
     data = list()
@@ -34,16 +34,27 @@ def zfs_run_command(module, command, args, fields):
 
 def zfs_facts(module):
     facts = dict()
+    pool_props = module.params['pool_props'].split(',')
+    fs_props = module.params['fs_props'].split(',')
 
-    facts['zfs_pools'] = zfs_run_command(module, 'zpool', ' list -Hp', ZPOOL_DEFAULT_PROPS)
-    facts['zfs_filesystems'] = zfs_run_command(module, 'zfs', ' list -Hpt filesystem', ZFS_DEFAULT_PROPS)
+    try:
+        facts['zfs_pools'] = zfs_run_command(module, 'zpool', ' list -Hp', pool_props)
+        facts['zfs_filesystems'] = zfs_run_command(module, 'zfs', ' list -Hpt filesystem', fs_props)
+        facts['zfs_present'] = True
+    except Exception:
+        facts['zfs_present'] = False
 
     results = { 'ansible_facts': facts }
     return results
 
 def main():
     global module
-    module = AnsibleModule(argument_spec = dict())
+    module = AnsibleModule(
+        argument_spec = dict(
+            pool_props    = dict(default=ZPOOL_DEFAULT_PROPS),
+            fs_props      = dict(default=ZFS_DEFAULT_PROPS),
+        )
+    )
     data = zfs_facts(module)
     module.exit_json(**data)
 
