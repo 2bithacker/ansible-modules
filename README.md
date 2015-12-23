@@ -26,3 +26,7 @@ shark.2bithacker.net | success >> {
 ## zfs_facts
 
 Facts module to collect information on existing zpools and zfs filesystems.
+
+## do_metadata
+
+All of the information from the [DigitalOcean Metadata API](https://developers.digitalocean.com/documentation/metadata/) dumped into Ansible facts.
