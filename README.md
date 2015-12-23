@@ -9,10 +9,10 @@ A facts gathering module for FreeBSD's `sysrc` utility, which mostly grabs the v
 > ansible somehost.example -m sysrc
 somehost.example | success >> {
     "ansible_facts": {
-        "sysrc_defaultrouter": "192.51.100.1",
+        "sysrc_defaultrouter": "192.0.2.1",
         "sysrc_dumpdev": "NO",
         "sysrc_hostname": "somehost.example",
-        "sysrc_ifconfig_vtnet0": "inet 192.51.100.110 netmask 0xffffff00",
+        "sysrc_ifconfig_vtnet0": "inet 192.0.2.110 netmask 0xffffff00",
         "sysrc_local_unbound_enable": "YES",
         "sysrc_nginx_enable": "YES",
         "sysrc_ntpd_enable": "YES",
