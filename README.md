@@ -1,7 +1,18 @@
 # ansible-modules
 Various Ansible modules
 
-## sysrc
+## Inventory
+
+### digitalocean
+
+A dynamic inventory script for DigitalOcean droplets. All droplets are placed in a 'droplet' group
+as well as grouped by individual droplet tags. Also, `ansible_ssh_host` is set for each host to the
+public IPv4 address of the droplet. This is significantly different from the stock `digital_ocean.py`
+inventory module.
+
+## Facts
+
+### sysrc
 
 A facts gathering module for FreeBSD's `sysrc` utility, which mostly grabs the variables set in /etc/rc.conf
 
@@ -23,7 +34,7 @@ somehost.example | success >> {
 }
 ```
 
-## zfs_facts
+### zfs_facts
 
 Facts module to collect information on existing zpools and zfs filesystems.
 
@@ -59,7 +70,7 @@ somehost.example | success >> {
 }
 ```
 
-## do_metadata
+### do_metadata
 
 All of the information from the [DigitalOcean Metadata API](https://developers.digitalocean.com/documentation/metadata/) dumped into Ansible facts.
 
