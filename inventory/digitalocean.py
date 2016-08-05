@@ -39,7 +39,7 @@ class DigitalOceanInventory(object):
     def do_request(self, path):
         req = urllib2.Request(url='https://api.digitalocean.com%s' % (path))
         req.add_header('Content-type', 'application/json')
-        req.add_header('Authorization', 'Bearer '+self.api_token)
+        req.add_header('Authorization', 'Bearer ' + self.api_token)
         return urllib2.urlopen(req).read()
 
     def get_hostlist(self):
