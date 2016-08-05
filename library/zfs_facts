@@ -3,8 +3,9 @@
 from ansible.module_utils.basic import *
 from ansible.module_utils.facts import *
 
-ZPOOL_DEFAULT_PROPS='name,size,alloc,free,fragmentation,expandsize,capacity,health,altroot'
-ZFS_DEFAULT_PROPS='name,used,available,referenced,mountpoint'
+ZPOOL_DEFAULT_PROPS = 'name,size,alloc,free,fragmentation,expandsize,capacity,health,altroot'
+ZFS_DEFAULT_PROPS = 'name,used,available,referenced,mountpoint'
+
 
 def zfs_parse_output(fields, text):
     data = list()
@@ -16,11 +17,12 @@ def zfs_parse_output(fields, text):
 
         for f in fields:
             linedata[f] = cols[x].strip()
-            x = x+1
+            x = x + 1
 
         data.append(linedata)
 
     return data
+
 
 def zfs_run_command(module, command, args, fields):
     cmd_path = module.get_bin_path(command)
@@ -44,15 +46,16 @@ def zfs_facts(module):
     except Exception:
         facts['zfs_present'] = False
 
-    results = { 'ansible_facts': facts }
+    results = {'ansible_facts': facts}
     return results
+
 
 def main():
     global module
     module = AnsibleModule(
-        argument_spec = dict(
-            pool_props    = dict(default=ZPOOL_DEFAULT_PROPS),
-            fs_props      = dict(default=ZFS_DEFAULT_PROPS),
+        argument_spec=dict(
+            pool_props=dict(default=ZPOOL_DEFAULT_PROPS),
+            fs_props=dict(default=ZFS_DEFAULT_PROPS),
         )
     )
     data = zfs_facts(module)

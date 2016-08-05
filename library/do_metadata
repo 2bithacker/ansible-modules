@@ -5,20 +5,22 @@ from ansible.module_utils.facts import *
 import json
 import urllib2
 
+
 def dometa_facts(module):
-	facts = dict()
+    facts = dict()
 
-	mdfd = urllib2.urlopen('http://169.254.169.254/metadata/v1.json')
-	metadata = json.load(mdfd)
-	facts['do_metadata'] = metadata
+    mdfd = urllib2.urlopen('http://169.254.169.254/metadata/v1.json')
+    metadata = json.load(mdfd)
+    facts['do_metadata'] = metadata
 
-	results = { 'ansible_facts': facts }
-	return results
+    results = {'ansible_facts': facts}
+    return results
+
 
 def main():
-	global module
-	module = AnsibleModule(argument_spec = dict())
-	data = dometa_facts(module)
-	module.exit_json(**data)
+    global module
+    module = AnsibleModule(argument_spec=dict())
+    data = dometa_facts(module)
+    module.exit_json(**data)
 
 main()

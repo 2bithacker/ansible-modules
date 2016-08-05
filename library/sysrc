@@ -3,24 +3,26 @@
 from ansible.module_utils.basic import *
 from ansible.module_utils.facts import *
 
+
 def sysrc_facts(module):
-	facts = dict()
+    facts = dict()
 
-	sysrc_path = module.get_bin_path('sysrc')
+    sysrc_path = module.get_bin_path('sysrc')
 
-	rc, out, err = module.run_command(sysrc_path + ' -a')
+    rc, out, err = module.run_command(sysrc_path + ' -a')
 
-	for line in out.strip().split('\n'):
-		k,v = line.split(': ',1)
-		facts["sysrc_%s" % k.strip()] = v.strip()
+    for line in out.strip().split('\n'):
+        k, v = line.split(': ', 1)
+        facts["sysrc_%s" % k.strip()] = v.strip()
 
-	results = { 'ansible_facts': facts }
-	return results
+    results = {'ansible_facts': facts}
+    return results
+
 
 def main():
-	global module
-	module = AnsibleModule(argument_spec = dict())
-	data = sysrc_facts(module)
-	module.exit_json(**data)
+    global module
+    module = AnsibleModule(argument_spec=dict())
+    data = sysrc_facts(module)
+    module.exit_json(**data)
 
 main()
